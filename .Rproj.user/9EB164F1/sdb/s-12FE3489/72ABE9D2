@@ -1,0 +1,17 @@
+{
+    "contents" : "\n# This is the server logic for a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\n\ngetX <- function(input) {\n  X <- input$temperature\n  X <- cbind(X, input$pression)\n  \n  #X <- cbind(X, input$wind) \"Wind is not trained enough\n  X <- cbind(X, 0)\n  #X <- cbind(X, input$rain) \"Rain is not trained enough\n  X <- cbind(X, 0)\n  \n  X <- cbind(X, input$humidity)\n  X <- as.vector(X)\n  return(X)\n}\n\ngetResult <- function(X, xMin, xMax, theta) {\n  r <- (X - xMin) / xMax\n  r <- r %*% theta\n  r <- r * 1218\n  \n  r <- (r * 100) / 60 #Translate seconds into ml\n}\n\ngetModel <- function(param) {\n  model <- read.csv(\"data/iRigModel\", sep=\"\")\n  model <- t(model)\n  if(param == \"xMin\") {\n    return(model[,1])\n  }\n  if(param == \"xMax\") {\n    return(model[,2])\n  }\n  if(param == \"theta\") {\n    return(model[,3])\n  }\n}\n\n\n#model <- t(model)\n\nshinyServer(function(input, output) {\n  shinyAppDir(\".\")\n  \n  \n  X <- reactive({getX(input)})\n  \n  output$X <- X\n  output$xMin <- reactive({getModel(\"xMin\")})\n  \n  output$pumpDuration <- renderText({paste(\"This basilicum plant needs today\", round(getResult(getX(input), getModel(\"xMin\"), getModel(\"xMax\"), getModel(\"theta\"))), \"ml of water\", sep = \" \")})\n  \n  output$test <- renderUI({\n    tags$img(src = \"http://mikmak.cc/plant.jpg\")\n  })\n  \n})\n",
+    "created" : 1472251013814.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2186127015",
+    "id" : "72ABE9D2",
+    "lastKnownWriteTime" : 1472251070,
+    "path" : "~/CloudStation/private/myProjects/plant.watering.Shiny/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

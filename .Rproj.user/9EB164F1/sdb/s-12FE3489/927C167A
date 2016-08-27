@@ -1,0 +1,17 @@
+{
+    "contents" : "\n# This is the user-interface definition of a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\n\nsource(\"getRecentMeteoData.R\")\n\nnormalizeVector <- function(x) { \n  #attr(x, 'normalizeMin') <- min(x);\n  #attr(x, 'normalizeMax') <- max(x);\n  xMin <- min(x);\n  xMax <- max(x);\n  \n  #x <- (x-min(x))/(max(x)-min(x));\n  #x <- (x-min(x))/(max(x));\n  xDiff <- xMax - xMin;\n  xFactor <- 1/xDiff;\n  \n  \n  x <- x - xMin;\n  x <- x * xFactor;\n  \n  \n  x <- (x^2)^(1/2)\n  xMin <- (xMin^2)^(1/2)\n  \n  attr(x,\"yMax\") <- xMax;\n  attr(x,\"yMin\") <- xMin;\n  attr(x,\"yFactor\") <- xFactor;\n  \n  return(x);\n};\n\nX <- getRecentWeatherData()\n\nX <- as.vector(X, mode = \"integer\")\n\ntemp <- (X[1])\n\nshinyUI(pageWithSidebar(\n  headerPanel(\"plant.watering\"),\n  sidebarPanel(\n    h4('Enter the Weather Parameters on your location at 22h00'),\n    h5('Default values are the actual weather in Zurich (CH)'),\n    numericInput(\"temperature\", \"Temperature in C (-10 - +40): \", value =  temp, -10, 40, 1),\n    #textInput(\"temperature\", \"Temperature in C (+10 - +40): \", value =  temp),\n    p(''),\n    numericInput(\"pression\", \"Pressure (QFE - Sensor Value): \", X[2], 900, 1050, 2),\n    HTML('<br /><br />'),\n    numericInput(\"wind\", \"Wind in km/h: \", X[3], 0, 25, 0.5),\n    numericInput(\"rain\", \"Rain in mm/h: \", X[4], 0, 25, 0.1),\n    numericInput(\"humidity\", \"Humidity in % (50% - 100%): \", X[5], 50, 100, 5)\n  ),\n  mainPanel(\n    h4('You entered:'),\n    verbatimTextOutput(\"X\"),\n    uiOutput('test'),\n    h4(\"Result\"),\n    verbatimTextOutput(\"pumpDuration\")\n  )\n))\n",
+    "created" : 1472251013376.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "223106576",
+    "id" : "927C167A",
+    "lastKnownWriteTime" : 1472251095,
+    "path" : "~/CloudStation/private/myProjects/plant.watering.Shiny/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}
