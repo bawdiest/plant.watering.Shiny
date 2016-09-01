@@ -34,9 +34,9 @@ I trained my model last summer to irrigate my basilicum plant @10PM!
 
 So the values you provide to this model should correspond to values in the evening on your location.
 
-
-What plant.watering provides You
+plant.watering is opensource!
 ========================================================
-
-ARROUND THE WEB
-========================================================
+You can find the specifications of all the parts used for that application on my github.com account.
+- Hardware - https://github.com/bawdiest/LowPower-Remote-Switch
+- Node-Red Node to controll Arduino/Genuino LowPower-Remote-Switch - https://github.com/bawdiest/Arduino-BLE-Firmata
+- shinyApp - https://github.com/bawdiest/plant.watering.Shiny
